@@ -1,0 +1,13 @@
+.MessageContainer {
+    font-size: 13px;
+    background-color: rgb(255, 188, 188);
+}
+
+.Message {
+    border-bottom: 1px solid rgb(128, 128, 128);
+    padding: 6px 10px;
+}
+
+.active {
+    background-color: orangered;
+}
