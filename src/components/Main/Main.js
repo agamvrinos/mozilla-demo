@@ -123,9 +123,6 @@ class Main extends Component {
                 <div className={classes.MessageContainer}>
                     {ret[1]}
                 </div>
-                {/* <Output  */}
-                    {/* input={this.state.input} */}
-                    {/* output={this.state.output} /> */}
             </div>
         );
     }
