@@ -28,3 +28,21 @@ input {
     left: 50%;
 }
 
+.ButtonClicked {
+    color: #6363ff;
+    background-color: #eee;
+}
+
+.Highlight {
+    background-color: yellow;
+}
+
+.HighlightActive {
+    background-color: orangered;
+}
+
+.MessageContainer {
+    /* padding: 5px; */
+    font-size: 13px;
+    background-color: rgb(255, 188, 188);
+}

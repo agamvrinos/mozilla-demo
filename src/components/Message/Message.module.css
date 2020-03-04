@@ -1,0 +1,8 @@
+.active {
+    background-color: orangered;
+}
+
+.Message {
+    border-bottom: 1px solid rgb(128, 128, 128);
+    padding: 6px 10px;
+}
