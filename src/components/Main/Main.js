@@ -14,14 +14,7 @@ class Main extends Component {
     getHighlightedText = (text, highlight) => {
         let match = 0
         const toRet = text.map((entry, j) => {
-            // Split on highlight term and include term into parts, ignore case
-            let regex = new RegExp(`(${highlight})`, "gi");
-            if (this.props.matchCase) {
-                regex = new RegExp(`(${highlight})`);
-            }
-            const parts = entry.split(regex);
-            console.log(parts);
-
+            const parts = this.getSplitParts(entry, highlight);
             return (
                 <Message key={j}> 
                     <FontAwesomeIcon style={{marginRight: '5px'}}icon={faCaretRight} />
@@ -45,17 +38,22 @@ class Main extends Component {
                 </Message>
             )
         })
-        console.log(match);
-        return [match, toRet];
+        return toRet;
+    }
+
+    getSplitParts = (text, highlight) => {
+        let regex = new RegExp(`(${highlight})`, "gi");
+        if (this.props.matchCase) {
+            regex = new RegExp(`(${highlight})`);
+        }
+        return text.split(regex);
     }
 
     render() {
         let matchCaseButton = <button onClick={this.props.onToggleMatchCase}>Match Case</button>
         if (this.props.matchCase) {
-            matchCaseButton = <button className={classes.ButtonClicked} onClick={this.props.onToggleMatchCase}>Match Case</button>
+            matchCaseButton = <button className={classes.ButtonClicked} onClick={this.props.onToggleMatchCase}>Match Case </button>;
         }
-
-        let ret = this.getHighlightedText(this.props.output, this.props.input);
 
         return (
             <div className={classes.Main}>
@@ -65,7 +63,7 @@ class Main extends Component {
                         placeholder="Search in logs" 
                         onChange={this.props.onUpdateInput} 
                         value={this.props.input}/>
-                    <span style={{fontSize: '11px'}}>{this.props.caretIndex + 1} of {ret[0]}</span>
+                    {this.props.totalMatches > 0 ? <span style={{fontSize: '11px', margin: '0 6px'}}>{this.props.caretIndex + 1} of {this.props.totalMatches}</span> :  null}
                     <button onClick={this.props.onIncrementCaret}>
                         <FontAwesomeIcon icon={faAngleUp} />
                     </button>
@@ -75,7 +73,7 @@ class Main extends Component {
                     {matchCaseButton}
                 </div>
                 <div className={classes.MessageContainer}>
-                    {ret[1]}
+                    {this.getHighlightedText(this.props.output, this.props.input)}
                 </div>
             </div>
         );
@@ -87,7 +85,8 @@ const mapStateToProps = ( state ) => {
         input: state.input,
         output: state.output,
         matchCase: state.matchCase,
-        caretIndex: state.caretIndex
+        caretIndex: state.caretIndex,
+        totalMatches: state.totalMatches
     };
  };
 
@@ -96,7 +95,7 @@ const mapDispatchToProps = dispatch => {
         onUpdateInput: (event) => dispatch({type: actions.UPDATE_INPUT, input: event.target.value}),
         onToggleMatchCase: () => dispatch({type: actions.TOGGLE_MATCH_CASE}),
         onIncrementCaret: () => dispatch({type: actions.INCREMENT_CARET}),
-        onDecrementCaret: () => dispatch({type: actions.DECREMENT_CARET})
+        onDecrementCaret: () => dispatch({type: actions.DECREMENT_CARET}),
     };
 }
  

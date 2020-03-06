@@ -1,7 +1,7 @@
 import actions from './actions';
 
 const initialState = {
-    input: 'a',
+    input: '',
     output: [
         "This is a random text to be highlighted in the demo app",
         "Guess what, this is another random text to be highlighted in the demo app",
@@ -10,6 +10,14 @@ const initialState = {
     matchCase: false,
     caretIndex: 0,
     totalMatches: 0
+}
+
+const getSplitParts = (text, highlight, matchCase) => {
+    let regex = new RegExp(`(${highlight})`, "gi");
+    if (matchCase) {
+        regex = new RegExp(`(${highlight})`);
+    }
+    return text.split(regex);
 }
 
 const reducer = (state = initialState, action) => {
@@ -24,10 +32,22 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 caretIndex: state.caretIndex - 1
             };
-        case (actions.UPDATE_INPUT): 
+        case (actions.UPDATE_INPUT):
+            let count = 0;
+            if (action.input) {
+                state.output.forEach(out => {
+                    const parts = getSplitParts(out, action.input, state.matchCase);
+                    parts.forEach(part => {
+                        if (part.toLowerCase() === action.input.toLowerCase()) {
+                            count += 1;
+                        }
+                    })
+                })
+            }
             return {
                 ...state,
-                input: action.input
+                input: action.input,
+                totalMatches: count
             };
         default: 
             return state;
