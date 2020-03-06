@@ -1,66 +1,22 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Message from '../Message/Message';
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
+import actions from '../../store/actions';
 import classes from './Main.module.css';
 
 class Main extends Component {
-    state = {
-        input: 'a',
-        output: [],
-        matchCase: false,
-        caretIndex: 0,
-        totalMatches: 0
-    }
-
-    componentDidMount() {
-        const output = [
-            "This is a random text to be highlighted in the demo app",
-            "Guess what, this is another random text to be highlighted in the demo app",
-            "Just some more output"
-        ]
-        this.setState({ output: output });
-    }
-
-    incrementCaretCounterHandler = () => {
-        this.setState((prevState) => {
-            return {
-                caretIndex: prevState.caretIndex + 1,
-            }
-        })
-    }
-
-    decrementCaretCounterHandler = () => {
-        if (this.state.caretIndex > 0) {
-            this.setState((prevState) => {
-                return {
-                    caretIndex: prevState.caretIndex - 1,
-                }
-            })
-        }
-    }
-
-    inputChangedHandler = (event) => {
-        this.setState({ input: event.target.value });        
-    }
-
-    matchCaseHandler = () => {
-        this.setState((prevState) => {
-            return {
-                matchCase: !prevState.matchCase,
-            }
-        })
-    }
 
     getHighlightedText = (text, highlight) => {
         let match = 0
         const toRet = text.map((entry, j) => {
             // Split on highlight term and include term into parts, ignore case
             let regex = new RegExp(`(${highlight})`, "gi");
-            if (this.state.matchCase) {
+            if (this.props.matchCase) {
                 regex = new RegExp(`(${highlight})`);
             }
             const parts = entry.split(regex);
@@ -72,7 +28,7 @@ class Main extends Component {
                     { parts.map((part, i) => {
                         let highlightClass = []
                         if (part.toLowerCase() === highlight.toLowerCase()) {
-                            if (match === this.state.caretIndex) {
+                            if (match === this.props.caretIndex) {
                                 highlightClass.push(classes.HighlightActive)
                             } else {
                                 highlightClass.push(classes.Highlight)
@@ -90,18 +46,16 @@ class Main extends Component {
             )
         })
         console.log(match);
-        // this.setState({totalMatches: match})
-        // this.doYourTang(match);
         return [match, toRet];
     }
 
     render() {
-        let matchCaseButton = <button onClick={this.matchCaseHandler}>Match Case</button>
-        if (this.state.matchCase) {
-            matchCaseButton = <button className={classes.ButtonClicked} onClick={this.matchCaseHandler}>Match Case</button>
+        let matchCaseButton = <button onClick={this.props.onToggleMatchCase}>Match Case</button>
+        if (this.props.matchCase) {
+            matchCaseButton = <button className={classes.ButtonClicked} onClick={this.props.onToggleMatchCase}>Match Case</button>
         }
 
-        let ret = this.getHighlightedText(this.state.output, this.state.input);
+        let ret = this.getHighlightedText(this.props.output, this.props.input);
 
         return (
             <div className={classes.Main}>
@@ -109,13 +63,13 @@ class Main extends Component {
                     <input 
                         type="text" 
                         placeholder="Search in logs" 
-                        onChange={this.inputChangedHandler} 
-                        value={this.state.input}/>
-                    <span style={{fontSize: '11px'}}>{this.state.caretIndex + 1} of {ret[0]}</span>
-                    <button onClick={this.incrementCaretCounterHandler}>
+                        onChange={this.props.onUpdateInput} 
+                        value={this.props.input}/>
+                    <span style={{fontSize: '11px'}}>{this.props.caretIndex + 1} of {ret[0]}</span>
+                    <button onClick={this.props.onIncrementCaret}>
                         <FontAwesomeIcon icon={faAngleUp} />
                     </button>
-                    <button onClick={this.decrementCaretCounterHandler}>
+                    <button onClick={this.props.onDecrementCaret}>
                         <FontAwesomeIcon icon={faAngleDown} />
                     </button>
                     {matchCaseButton}
@@ -128,4 +82,22 @@ class Main extends Component {
     }
 }
 
-export default Main;
+const mapStateToProps = ( state ) => {
+    return { 
+        input: state.input,
+        output: state.output,
+        matchCase: state.matchCase,
+        caretIndex: state.caretIndex
+    };
+ };
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onUpdateInput: (event) => dispatch({type: actions.UPDATE_INPUT, input: event.target.value}),
+        onToggleMatchCase: () => dispatch({type: actions.TOGGLE_MATCH_CASE}),
+        onIncrementCaret: () => dispatch({type: actions.INCREMENT_CARET}),
+        onDecrementCaret: () => dispatch({type: actions.DECREMENT_CARET})
+    };
+}
+ 
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
