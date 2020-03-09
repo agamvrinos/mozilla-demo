@@ -51,6 +51,25 @@ const updateInput = (state, action) => {
     };
 }
 
+const toggleMatchCase = (state, action) => {
+    let count = 0;
+    if (state.input) {
+        state.output.forEach(out => {
+            const parts = getSplitParts(out, state.input, !state.matchCase);
+            parts.forEach(part => {
+                if (part.toLowerCase() === state.input.toLowerCase()) {
+                    count += 1;
+                }
+            })
+        })
+    }
+    return {
+        ...state,
+        totalMatches: count,
+        matchCase: !state.matchCase
+    };
+}
+
 const getSplitParts = (text, highlight, matchCase) => {
     let regex = new RegExp(`(${highlight})`, "gi");
     if (matchCase) {
@@ -64,6 +83,7 @@ const reducer = (state = initialState, action) => {
         case (actions.INCREMENT_CARET): return incrementCaret(state, action);
         case (actions.DECREMENT_CARET): return decrementCaret(state, action);
         case (actions.UPDATE_INPUT): return updateInput(state, action);
+        case (actions.TOGGLE_MATCH_CASE): return toggleMatchCase(state, action);
         default: return state;
     }
 }
