@@ -13,6 +13,9 @@ const initialState = {
 }
 
 const incrementCaret = (state, action) => {
+    if (state.caretIndex === state.totalMatches - 1) {
+        return state;
+    }
     return {
         ...state,
         caretIndex: state.caretIndex + 1
@@ -20,6 +23,9 @@ const incrementCaret = (state, action) => {
 }
 
 const decrementCaret = (state, action) => {
+    if (state.caretIndex === 0) {
+        return state;
+    }
     return {
         ...state,
         caretIndex: state.caretIndex - 1
