@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import SearchBar from '../SearchBar/SearchBar';
 import Message from '../Message/Message';
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -50,28 +50,9 @@ class Main extends Component {
     }
 
     render() {
-        let matchCaseButton = <button onClick={this.props.onToggleMatchCase}>Match Case</button>
-        if (this.props.matchCase) {
-            matchCaseButton = <button className={classes.ButtonClicked} onClick={this.props.onToggleMatchCase}>Match Case </button>;
-        }
-
         return (
             <div className={classes.Main}>
-                <div className={classes.Filter}>
-                    <input 
-                        type="text" 
-                        placeholder="Search in logs" 
-                        onChange={this.props.onUpdateInput} 
-                        value={this.props.input}/>
-                    {this.props.totalMatches > 0 ? <span style={{fontSize: '11px', margin: '0 6px'}}>{this.props.caretIndex + 1} of {this.props.totalMatches}</span> :  null}
-                    <button onClick={this.props.onIncrementCaret}>
-                        <FontAwesomeIcon icon={faAngleUp} />
-                    </button>
-                    <button onClick={this.props.onDecrementCaret}>
-                        <FontAwesomeIcon icon={faAngleDown} />
-                    </button>
-                    {matchCaseButton}
-                </div>
+                <SearchBar />
                 <div className={classes.MessageContainer}>
                     {this.getHighlightedText(this.props.output, this.props.input)}
                 </div>

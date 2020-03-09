@@ -11,28 +11,6 @@
     transform: translate(-50%, -50%);
 }
 
-.Filter {
-    height: 25px;
-    position: relative;
-    border: 1px solid rgb(128, 128, 128);
-    border-radius: 1px;
-}
-
-input {
-    width: 75%;
-    border-radius: 5px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-left: 5px;
-    top: 50%;
-    left: 50%;
-}
-
-.ButtonClicked {
-    color: #6363ff;
-    background-color: #eee;
-}
-
 .Highlight {
     background-color: yellow;
 }

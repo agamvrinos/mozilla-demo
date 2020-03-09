@@ -1,0 +1,21 @@
+.SearchBar {
+    height: 25px;
+    position: relative;
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 1px;
+}
+
+.ButtonClicked {
+    color: #6363ff;
+    background-color: #eee;
+}
+
+.SearchBarInput {
+    width: 75%;
+    border-radius: 5px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 5px;
+    top: 50%;
+    left: 50%;
+}
