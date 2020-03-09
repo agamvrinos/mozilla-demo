@@ -18,4 +18,4 @@ You will also see any lint errors in the console.
 
 ## Console
 
-![Devtools console search](img.png)
+![Devtools console search](demo.gif)
