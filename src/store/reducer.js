@@ -66,6 +66,7 @@ const toggleMatchCase = (state, action) => {
     return {
         ...state,
         totalMatches: count,
+        caretIndex: 0,
         matchCase: !state.matchCase
     };
 }
