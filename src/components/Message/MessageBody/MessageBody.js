@@ -4,19 +4,35 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 
+import actions from '../../../store/actions';
 import classes from './MessageBody.module.css';
 
 class MessageBody extends React.Component {
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.visibleMessages !== nextProps.visibleMessages || 
+            this.props.input !== nextProps.input ||
+            this.props.matchCase !== nextProps.matchCase ||
+            this.props.caretIndex !== nextProps.caretIndex) {
+                return true;
+            }
+            return false;
+    }
+
     getHighlightedText = (text, highlight) => {
-        let match = 0
         const parts = this.getSplitParts(text, highlight);
         return (
             <div> 
-                <FontAwesomeIcon style={{marginRight: '5px'}}icon={faCaretRight} />
+                <FontAwesomeIcon style={{marginRight: '5px'}} icon={faCaretRight} />
                 { parts.map((part, i) => {
                     let highlightClass = []
                     if (part.toLowerCase() === highlight.toLowerCase()) {
-                        highlightClass.push(classes.Highlight)
+                         if (this.props.totalMatches === this.props.caretIndex) {
+                                highlightClass.push(classes.HighlightActive)
+                            } else {
+                                highlightClass.push(classes.Highlight)
+                            }
+                        this.props.onIncrementTotalMatches();
                     }
                     return (
                         <span 
@@ -44,15 +60,21 @@ class MessageBody extends React.Component {
         return <div>{l}</div>;
     }
 }
-  
+
 const mapStateToProps = ( state ) => {
     return { 
         visibleMessages: state.visibleMessages,
         input: state.input,
-        output: state.output,
         matchCase: state.matchCase,
-        caretIndex: state.caretIndex
+        caretIndex: state.caretIndex,
+        totalMatches: state.totalMatches
     };
- };
+};
 
-export default connect(mapStateToProps)(MessageBody);
+const mapDispatchToProps = dispatch => {
+    return {
+        onIncrementTotalMatches: () => dispatch({type: actions.INCREMENT_TOTAL_MATCHES}),
+    };
+};
+  
+export default connect(mapStateToProps, mapDispatchToProps)(MessageBody);
