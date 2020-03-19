@@ -7,11 +7,10 @@ import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import actions from '../../../store/actions';
 import classes from './MessageBody.module.css';
 
-class MessageBody extends React.Component {
+class MessageBody extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.visibleMessages !== nextProps.visibleMessages || 
-            this.props.input !== nextProps.input ||
+        if (this.props.input !== nextProps.input ||
             this.props.matchCase !== nextProps.matchCase ||
             this.props.caretIndex !== nextProps.caretIndex) {
                 return true;
@@ -19,11 +18,12 @@ class MessageBody extends React.Component {
             return false;
     }
 
-    getHighlightedText = (text, highlight) => {
+    getHighlightedText = (text, i, highlight) => {
         const parts = this.getSplitParts(text, highlight);
         return (
-            <div> 
+            <div key={i}> 
                 <FontAwesomeIcon style={{marginRight: '5px'}} icon={faCaretRight} />
+
                 { parts.map((part, i) => {
                     let highlightClass = []
                     if (part.toLowerCase() === highlight.toLowerCase()) {
@@ -54,16 +54,16 @@ class MessageBody extends React.Component {
     }
 
     render() {
-        const firstPart = this.props.parts[0];
-        const l = this.getHighlightedText(firstPart, this.props.input);
+        const renderedParts = this.props.parts.map((part, i) => {
+            return this.getHighlightedText(part, i, this.props.input);
+        })
 
-        return <div>{l}</div>;
+        return renderedParts;
     }
 }
 
 const mapStateToProps = ( state ) => {
     return { 
-        visibleMessages: state.visibleMessages,
         input: state.input,
         matchCase: state.matchCase,
         caretIndex: state.caretIndex,
@@ -76,5 +76,5 @@ const mapDispatchToProps = dispatch => {
         onIncrementTotalMatches: () => dispatch({type: actions.INCREMENT_TOTAL_MATCHES}),
     };
 };
-  
+
 export default connect(mapStateToProps, mapDispatchToProps)(MessageBody);
