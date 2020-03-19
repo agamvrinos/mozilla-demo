@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import SearchBar from '../SearchBar/SearchBar';
-import Highlighter from '../Highlighter/Highlighter';
+import ConsoleOutput from '../ConsoleOutput/ConsoleOutput';
 
 import classes from './Main.module.css';
 
@@ -12,25 +11,10 @@ class Main extends Component {
         return (
             <div className={classes.Main}>
                 <SearchBar />
-                <div className={classes.MessageContainer}>
-                    <Highlighter 
-                        input={this.props.input}
-                        output={this.props.output}
-                        matchCase={this.props.matchCase}
-                        caretIndex={this.props.caretIndex}/>
-                </div>
+                <ConsoleOutput />
             </div>
         );
     }
 }
 
-const mapStateToProps = ( state ) => {
-    return { 
-        input: state.input,
-        output: state.output,
-        matchCase: state.matchCase,
-        caretIndex: state.caretIndex
-    };
- };
-
-export default connect(mapStateToProps)(Main);
+export default Main;

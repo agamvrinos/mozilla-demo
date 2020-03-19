@@ -1,0 +1,6 @@
+.MessageContainer {
+    font-size: 13px;
+    background-color: rgb(255, 188, 188);
+    border-bottom: 1px solid rgb(128, 128, 128);
+    padding: 5px;
+}

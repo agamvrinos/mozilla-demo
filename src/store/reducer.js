@@ -1,6 +1,7 @@
 import actions from './actions';
 
 const initialState = {
+    visibleMessages: ["1", "2", "3"],
     input: '',
     output: [
         "This is a random text to be highlighted in the demo app",
